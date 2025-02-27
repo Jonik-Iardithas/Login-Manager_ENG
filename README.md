@@ -17,7 +17,7 @@ To make the whole thing a bit more fashionable I added custom icons that can be 
 
 **Installation instructions:**
 
-Download the complete archive at `Zip/ALL/` and expand it, so that there is `Install.ps1` and the corresponding zip-archive. Afterwards right-click on `Install.ps1` and choose *"Run with PowerShell"*.
+Download the complete archive at `Zip/ALL/` and expand it, so that there is `Install.ps1` and the corresponding zip-archive. Afterwards right-click on `Install.ps1` and choose *"Run with PowerShell"*. Once installed expand the icons archive and copy the icons as desired (see above).
 
 Some technical remarks: I make excessive use of the `+=` method! I'm well aware of the ongoing discussion around that theme. Just that much: I use windows powershell 5.1 and could not detect any performance issues related to this method. On the contrary it appeared that when using some of the highly praised alternatives, it resulted in measurable performance drops. Therefore, whoever feels repelled by the `+=` method should avoid my scripts (or change attitude).
 
