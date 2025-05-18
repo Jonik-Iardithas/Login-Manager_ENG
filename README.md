@@ -4,20 +4,20 @@ I spent most of the summer of 2024 writing two applications in powershell. I had
 
 So to the apps then...
 
-The [Login Manager](https://github.com/Jonik-Iardithas/Login-Manager_ENG/) creates and uses a json-file for data storage. The data itself is AES-encrypted. It uses a master password to access the data. Once in memory, the weakest part, as with many encryption programs, is that the memory can be read out and the data, including passwords, can be stolen. I searched the RAM after closing the app and couldn't find any remnants in memory. So to make sure to leave no traces, one has to close the app after usage.
+The [Login Manager](https://github.com/Jonik-Iardithas/Login-Manager_ENG/) creates and uses a json-file for data storage. The data itself is AES-encrypted. It uses a master password to access the data. Once in memory, the weakest part, as with many encryption programs, is that the memory can be read out and the data, including passwords, can be stolen. I searched the RAM after closing the app and couldn't find any remnants in memory. So to make sure to leave no traces, one has to close the app after usage (now happens automatically after the expiration of a certain time).
 
 The [Backup Maker](https://github.com/Jonik-Iardithas/Backup-Maker_ENG/) as its name implies, creates backups, more precisely incremental ones. This saves a lot of time compared to full backups, especially when using low speed USB-devices. Subsequently there is the option to generate a file protocol that lists all transfers in a proper manner. Important: In its current version Backup-Maker is only capable of saving folders, not entire drives. This feature may be added later. Note: The backup function runs in a seperate runspace, adding to the overall performance.
 
 I tinkered install-scripts for the apps, because they require a certain file-structure to work. There are no changes to the registry, just creation and copying of files and folders, and optionally the creation of shortcuts. At the bottom of this readme you find a list of the changes made.
 
-To make the whole thing a bit more fashionable I added custom icons that can be copied manually after the installation process is complete. By default the icon directory can be found at
+To make the whole thing a bit more aesthetic I added custom icons that can be selected during the installation process as required. By default the icon directory can be found at
 
 `C:\Program Files\PowerShellTools\Login-Manager\Icons`\
 `C:\Program Files\PowerShellTools\Backup-Maker\Icons`
 
 **Installation instructions:**
 
-Download the complete archive at `Zip/ALL/` and expand it, so that there is `Install.ps1` and the corresponding zip-archive. Afterwards right-click on `Install.ps1` and choose *"Run with PowerShell"*. Once installed expand the icons archive and copy the icons as desired (see above).
+Download the complete archive at `Zip/ALL/` and expand it, so that there is `Install.ps1` and the corresponding zip-archive. Afterwards right-click on `Install.ps1` and choose *"Run with PowerShell"*.
 
 Some technical remarks: I make excessive use of the `+=` method! I'm well aware of the ongoing discussion around that theme. Just that much: I use windows powershell 5.1 and could not detect any performance issues related to this method. On the contrary it appeared that when using some of the highly praised alternatives, it resulted in measurable performance drops. Therefore, whoever feels repelled by the `+=` method should avoid my scripts (or change attitude).
 
