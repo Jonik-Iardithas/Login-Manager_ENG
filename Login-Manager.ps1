@@ -35,7 +35,7 @@ $SyncHash = [HashTable]::Synchronized(@{Counter = $Global:Count})
 $RSList = @("Timer")
 
 $Msg_List = @{
-    Start         = "Login Manager started."
+    Start         = "Login-Manager started."
     NoLogins      = "Could not find `"Logins.json`". File has been created."
     NoUserData    = "Could not find `"UserData.dat`". File has been created."
     NewRecord     = "Dataset entered."
@@ -56,7 +56,7 @@ $Msg_List = @{
 }
 
 $Txt_List = @{
-    Form              = "Login Manager"
+    Form              = "Login-Manager"
     Edit_Form         = "Confirmation of alteration"
     Del_Form          = "Confirmation of deletion"
     MPW_Form          = "Enter Master Password"
@@ -98,7 +98,7 @@ $Tooltips_List = @{
 
 $MessageBoxes_List = @{
     Initialize_Msg_01 = "Unable to locate file {0}"
-    Initialize_Msg_02 = "Login Manager: Error!"
+    Initialize_Msg_02 = "Login-Manager: Error!"
 }
 
 $Icons_List = @{

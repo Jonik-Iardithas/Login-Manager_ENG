@@ -25,24 +25,45 @@ $ButtonForeColor = [System.Drawing.Color]::MidnightBlue
 $ButtonHoverColor = [System.Drawing.Color]::LightYellow
 $TextBoxBackColor = [System.Drawing.Color]::LightGoldenrodYellow
 $TextBoxForeColor = [System.Drawing.Color]::RoyalBlue
-$InstallText = "This installer prepares the application Login Manager for installation."
-$SuccessText = "Installation completed successfully!"
-$Options = @("Create desktop shortcut", "Create start menu entry", "Delete temporary files")
 $Global:Settings = "$env:LOCALAPPDATA\PowerShellTools\Login-Manager\Settings.ini"
 $Global:AppDir = "$env:LOCALAPPDATA\PowerShellTools\Login-Manager"
 $Global:Archive = "$PSScriptRoot\Login-Manager.zip"
-$Global:Temp = "$PSScriptRoot\Tmp"
+$Global:Icons = "$PSScriptRoot\Login-Manager - Icons_Custom.zip"
 $Global:Path = "$env:ProgramFiles\PowerShellTools\Login-Manager"
-$Global:Desktop = "$env:USERPROFILE\Desktop\Login Manager.lnk"
-$Global:StartMenu = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\PowerShellTools\Login-Manager\Login Manager.lnk"
-$Global:Uninstall = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\PowerShellTools\Login-Manager\Uninstall (Login Manager).lnk"
+$Global:Desktop = "$env:USERPROFILE\Desktop\Login-Manager.lnk"
+$Global:StartMenu = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\PowerShellTools\Login-Manager\Login-Manager.lnk"
+$Global:Uninstall = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\PowerShellTools\Login-Manager\Uninstall (Login-Manager).lnk"
 $Global:Content = @("LoginFile = $Global:AppDir\Logins.json", "UserDataFile = $Global:AppDir\UserData.dat", "IconFolder = $Global:Path\Icons\")
+
+$Txt_List = @{
+    Form       = "Installer for Login-Manager"
+    LabelA0    = "This installer prepares the application Login-Manager for installation."
+    LabelA1    = "Settings"
+    LabelA2    = "Installation completed successfully!"
+    LabelB     = "Installation directory"
+    clb_Box    = @("Create desktop shortcut", "Create start menu entry", "Install optional icons")
+    bt_Accept0 = "Continue"
+    bt_Accept1 = "Install"
+    bt_Cancel0 = "Abort"
+    bt_Cancel1 = "Back"
+    bt_Exit    = "Exit"
+    Folder     = "Please choose folder."
+}
+
+$TT_List = @{
+    ChangeFolder = "Click to change folder."
+}
+
+$MB_list = @{
+    Ini_01 = "Unable to locate file {0}"
+    Ini_02 = "Error!"
+}
 
 # ========== Self-Test ========================================
 
 If (!(Test-Path -Path $Global:Archive))
     {
-        [System.Windows.Forms.MessageBox]::Show("Unable to locate file `"$Global:Archive`".","Error!",0)
+        [System.Windows.Forms.MessageBox]::Show(($MB_list.Ini_01 -f $Global:Archive),$MB_list.Ini_02,0)
         Exit
     }
 
@@ -56,7 +77,7 @@ $Tooltip.IsBalloon = $true
 $Form = New-Object -TypeName System.Windows.Forms.Form
 $Form.ClientSize = $FormSize
 $Form.StartPosition = [System.Windows.Forms.FormStartPosition]::CenterScreen
-$Form.Text = "Installer for Login Manager"
+$Form.Text = $Txt_List.Form
 $Form.Icon = [System.Drawing.Icon]::ExtractAssociatedIcon("$PSHOME\powershell.exe")
 $Form.BackColor = $FormBackColor
 $Form.ForeColor = $FormForeColor
@@ -72,7 +93,7 @@ $LabelA.Left = 20
 $LabelA.Top = 20
 $LabelA.Width = $Form.ClientSize.Width - 40
 $LabelA.Height = 50
-$LabelA.Text = $InstallText
+$LabelA.Text = $Txt_List.LabelA0
 $LabelA.Font = New-Object -TypeName System.Drawing.Font($Fonts[$FontIndex].Name, ($FontSize + 1), $FontStyle)
 $LabelA.TextAlign = [System.Drawing.ContentAlignment]::MiddleCenter
 
@@ -82,7 +103,7 @@ $LabelB = New-Object -TypeName System.Windows.Forms.Label
 $LabelB.Left = 20
 $LabelB.Width = $Form.ClientSize.Width - 40
 $LabelB.Height = 20
-$LabelB.Text = "Installation directory"
+$LabelB.Text = $Txt_List.LabelB
 $LabelB.Font = New-Object -TypeName System.Drawing.Font($Fonts[$FontIndex].Name, $FontSize, $FontStyle)
 $LabelB.TextAlign = [System.Drawing.ContentAlignment]::MiddleCenter
 $LabelB.Visible = $false
@@ -98,14 +119,14 @@ $bt_Accept.FlatAppearance.MouseOverBackColor = $ButtonHoverColor
 $bt_Accept.BackColor = $ButtonBackColor
 $bt_Accept.ForeColor = $ButtonForeColor
 $bt_Accept.Font = New-Object -TypeName System.Drawing.Font($Fonts[$FontIndex].Name, $FontSize, $FontStyle)
-$bt_Accept.Text = "Continue"
+$bt_Accept.Text = $Txt_List.bt_Accept0
 $bt_Accept.TextAlign = [System.Drawing.ContentAlignment]::MiddleCenter
 $bt_Accept.Cursor = [System.Windows.Forms.Cursors]::Hand
 $bt_Accept.Add_Click(
     {
-        If ($this.Text -eq "Continue")
+        If ($this.Text -eq $Txt_List.bt_Accept0)
             {
-                $LabelA.Text = "Settings"
+                $LabelA.Text = $Txt_List.LabelA1
                 $LabelA.Font = New-Object -TypeName System.Drawing.Font($Fonts[$FontIndex].Name, $FontSize , $FontStyle)
                 $LabelA.Height = 20
                 $clb_Box.Top = $LabelA.Bounds.Bottom + 10
@@ -114,22 +135,19 @@ $bt_Accept.Add_Click(
                 $LabelB.Visible = $true
                 $tb_Path.Top = $LabelB.Bounds.Bottom + 10
                 $tb_Path.Visible = $true
-                $this.Text = "Install"
-                $bt_Cancel.Text = "Back"
+                $this.Text = $Txt_List.bt_Accept1
+                $bt_Cancel.Text = $Txt_List.bt_Cancel1
             }
-        ElseIf ($this.Text -eq "Install")
+        ElseIf ($this.Text -eq $Txt_List.bt_Accept1)
             {
-                New-Item -Path $Global:Path -ItemType Directory -ErrorAction SilentlyContinue
                 New-Item -Path "$Global:Path\Icons" -ItemType Directory -ErrorAction SilentlyContinue
                 New-Item -Path (Split-Path -Path $Global:Settings -Parent) -ItemType Directory -ErrorAction SilentlyContinue
 
                 Set-Content -Value $Global:Content -Path $Global:Settings -Force
 
-                Expand-Archive -Path $Global:Archive -DestinationPath $Global:Temp -Force
+                Expand-Archive -Path $Global:Archive -DestinationPath $Global:Path -Force
 
-                Copy-Item -Path "$Global:Temp\*" -Destination $Global:Path -Force -Recurse
-
-                If ($clb_Box.GetItemChecked(0))
+                If ($clb_Box.GetItemCheckState(0) -eq [System.Windows.Forms.CheckState]::Checked)
                     {
                         $WshShell = New-Object -ComObject WScript.Shell
                         $Shortcut = $WshShell.CreateShortcut($Global:Desktop)
@@ -143,7 +161,7 @@ $bt_Accept.Add_Click(
                         [System.IO.File]::WriteAllBytes($Global:Desktop, $Bytes)
                     }
 
-                If ($clb_Box.GetItemChecked(1))
+                If ($clb_Box.GetItemCheckState(1) -eq [System.Windows.Forms.CheckState]::Checked)
                     {
                         New-Item -Path (Split-Path -Path $Global:StartMenu -Parent) -ItemType Directory -ErrorAction SilentlyContinue
 
@@ -169,12 +187,12 @@ $bt_Accept.Add_Click(
                         [System.IO.File]::WriteAllBytes($Global:Uninstall, $Bytes)
                     }
 
-                If ($clb_Box.GetItemChecked(2))
+                If ($clb_Box.GetItemCheckState(2) -eq [System.Windows.Forms.CheckState]::Checked)
                     {
-                        Remove-Item -Path $Global:Temp -Recurse -Force
+                        Expand-Archive -Path $Global:Icons -DestinationPath "$Global:Path\Icons" -Force
                     }
 
-                $LabelA.Text = $SuccessText
+                $LabelA.Text = $Txt_List.LabelA2
                 $LabelA.Height = 50
                 $LabelA.Font = New-Object -TypeName System.Drawing.Font($Fonts[$FontIndex].Name, ($FontSize + 1) , $FontStyle)                
                 $LabelB.Visible = $false
@@ -198,25 +216,25 @@ $bt_Cancel.FlatAppearance.MouseOverBackColor = $ButtonHoverColor
 $bt_Cancel.BackColor = $ButtonBackColor
 $bt_Cancel.ForeColor = $ButtonForeColor
 $bt_Cancel.Font = New-Object -TypeName System.Drawing.Font($Fonts[$FontIndex].Name, $FontSize, $FontStyle)
-$bt_Cancel.Text = "Abort"
+$bt_Cancel.Text = $Txt_List.bt_Cancel0
 $bt_Cancel.TextAlign = [System.Drawing.ContentAlignment]::MiddleCenter
 $bt_Cancel.Cursor = [System.Windows.Forms.Cursors]::Hand
 $bt_Cancel.Add_Click(
     {
-        If ($this.Text -eq "Abort")
+        If ($this.Text -eq $Txt_List.bt_Cancel0)
             {
                 $Form.Close()
             }
-        ElseIf ($this.Text -eq "Back")
+        ElseIf ($this.Text -eq $Txt_List.bt_Cancel1)
             {
-                $LabelA.Text = $InstallText
+                $LabelA.Text = $Txt_List.LabelA0
                 $LabelA.Font = New-Object -TypeName System.Drawing.Font($Fonts[$FontIndex].Name, ($FontSize + 1) , $FontStyle)
                 $LabelA.Height = 50
                 $clb_Box.Visible = $false
                 $LabelB.Visible = $false
                 $tb_Path.Visible = $false
-                $bt_Accept.Text = "Continue"
-                $this.Text = "Abort"
+                $bt_Accept.Text = $Txt_List.bt_Accept0
+                $this.Text = $Txt_List.bt_Cancel0
             }
     }
 )
@@ -232,7 +250,7 @@ $bt_Exit.FlatAppearance.MouseOverBackColor = $ButtonHoverColor
 $bt_Exit.BackColor = $ButtonBackColor
 $bt_Exit.ForeColor = $ButtonForeColor
 $bt_Exit.Font = New-Object -TypeName System.Drawing.Font($Fonts[$FontIndex].Name, $FontSize, $FontStyle)
-$bt_Exit.Text = "Exit"
+$bt_Exit.Text = $Txt_List.bt_Exit
 $bt_Exit.TextAlign = [System.Drawing.ContentAlignment]::MiddleCenter
 $bt_Exit.Cursor = [System.Windows.Forms.Cursors]::Hand
 $bt_Exit.Visible = $false
@@ -254,10 +272,23 @@ $clb_Box.Font = New-Object -TypeName System.Drawing.Font($Fonts[$FontIndex].Name
 $clb_Box.BorderStyle = [System.Windows.Forms.BorderStyle]::None
 $clb_Box.CheckOnClick = $true
 $clb_Box.Visible = $false
-$clb_Box.Items.AddRange($Options)
+$clb_Box.Items.AddRange($Txt_List.clb_Box)
+
 For($i = 0; $i -lt $clb_Box.Items.Count; $i++)
     {
         $clb_Box.SetItemChecked($i,$true)
+    }
+
+If (!(Test-Path $Global:Icons))
+    {
+        $clb_Box.SetItemCheckState(2,[System.Windows.Forms.CheckState]::Indeterminate)
+        $clb_Box.Add_ItemCheck(
+            {
+                If ($_.Index -eq 2)
+                    {
+                        $_.NewValue = [System.Windows.Forms.CheckState]::Indeterminate
+                    }
+            })
     }
 
 # ========== Form: TextBoxes ==================================
@@ -275,19 +306,19 @@ $tb_Path.ReadOnly = $true
 $tb_Path.Visible = $false
 $tb_Path.Add_MouseHover(
     {
-        $Tooltip.SetToolTip($this,"Click to change folder.")
+        $Tooltip.SetToolTip($this,$TT_List.ChangeFolder)
     }
 )
 $tb_Path.Add_Click(
     {
         $Folder = New-Object -TypeName System.Windows.Forms.FolderBrowserDialog
-        $Folder.Description = "Please choose folder."
+        $Folder.Description = $Txt_List.Folder
         $Folder.RootFolder = 'MyComputer'
 
         If ($Folder.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK)
             {
                 $Global:Path = $Folder.SelectedPath
-                $tb_Path.Text = $Global:Path
+                $this.Text = $Global:Path
                 $Global:Content = @("LoginFile = $Global:AppDir\Logins.json", "UserDataFile = $Global:AppDir\UserData.dat", "IconFolder = $Global:Path\Icons\")
             }
     }
