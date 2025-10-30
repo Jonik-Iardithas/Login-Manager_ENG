@@ -1,8 +1,8 @@
-**Update 30.10.2025:**
+**Update 2025.10.30:**
 
 • The Login Manager now comes with an alternative Layout, which can be activated in the INI (see screenshots).\
 • Shortcuts to important program files have been implemented, among others to the INI-file, making tedious file-browsing unnecessary.\
-• The user is now able to change a once entered Master Password.\
+• The app now provides a facility for changing a once entered Master Password.\
 • There have been plenty of small improvements in terms of user-friendliness.
 
 **Hello world,**
