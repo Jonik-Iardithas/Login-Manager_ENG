@@ -1,3 +1,10 @@
+**Update 30.10.2025:**
+
+• The Login Manager now comes with an alternative Layout, which can be activated in the INI (see screenshots).\
+• Shortcuts to important program files have been implemented, among others to the INI-file, making tedious file-browsing unnecessary.\
+• The user is now able to change a once entered Master Password.\
+• There have been plenty of small improvements in terms of user-friendliness.
+
 **Hello world,**
 
 I spent most of the summer of 2024 writing two applications in powershell. I had the idea for this project for quite some time, but it was only then that I found the right starting point for it. One application was meant to involve the encryption of login-data, the other one was for incremental backups. Soon I realised that this project was about more than just scripting, unexpectedly I entered the realm of application development. I'm entirely positive about the results and since their completion I use my applications on a daily basis. For that reason I would like to share my works with as many users as possible. Furthermore these scripts can serve as a reference work to others who are in the process of learning powershell, as they are rather straight forward.
