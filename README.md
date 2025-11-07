@@ -80,3 +80,7 @@ Directories with icons and script-files:
 ![Login-Manager_Screenshot](https://github.com/Jonik-Iardithas/Login-Manager_ENG/blob/main/Img/Login-Manager_ENG_TB.png)
 <br>
 ![Login-Manager_Screenshot](https://github.com/Jonik-Iardithas/Login-Manager_ENG/blob/main/Img/Settings_TB.png)
+<br>
+![Login-Manager_Screenshot](https://github.com/Jonik-Iardithas/Login-Manager_ENG/blob/main/Img/Logins.png)
+<br>
+![Login-Manager_Screenshot](https://github.com/Jonik-Iardithas/Login-Manager_ENG/blob/main/Img/UserData.png)
